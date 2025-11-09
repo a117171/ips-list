@@ -1,4 +1,4 @@
-name: 更新主脚本
+name: 更新反代IP库
 on:
   workflow_dispatch:
   schedule:
@@ -46,7 +46,7 @@ jobs:
         run: |
           curl -L "${{ vars.PROXIP_URL }}" -o proxyip.txt
 
-      - name: 提交更新的主脚本文件
+      - name: 提交更新的反代IP库文件
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
@@ -62,7 +62,7 @@ jobs:
           else
             echo "检测到 proxyip.txt 文件有变化，开始提交"
             git add proxyip.txt
-            git commit -m "更新主脚本文件 $(date '+%Y-%m-%d %H:%M:%S')"
+            git commit -m "更新反代IP库文件 $(date '+%Y-%m-%d %H:%M:%S')"
             git push
             echo "提交完成"
           fi
