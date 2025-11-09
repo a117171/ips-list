@@ -240,3 +240,61 @@ jobs:
             git push
             echo "提交完成"
           fi
+  build5:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码仓库
+        uses: actions/checkout@v4
+
+      - name: Check SOCKS5_URL variable
+        run: |
+          # 检查是否设置了SOCKS5_URL变量
+          SOCKS5_URL="${{ vars.SOCKS5_URL }}"
+          if [ -z "$SOCKS5_URL" ]; then
+            echo "❌ 错误: 未设置 SOCKS5_URL 变量"
+            echo "请在仓库设置中添加 SOCKS5_URL 变量："
+            echo "1. 进入仓库 Settings > Secrets and variables > Actions"
+            echo "2. 在 Variables 标签页中添加新变量"
+            echo "3. Name: SOCKS5_URL"
+            echo "4. Value: 脚本的URL地址"
+            exit 1
+          fi
+          echo "✅ SOCKS5_URL 变量已设置: $SOCKS5_URL"
+
+      - name: Check URL status
+        id: check_url
+        run: |
+          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" "${{ vars.SOCKS5_URL }}")
+          echo "Status code: $STATUS_CODE"
+          if [ "$STATUS_CODE" = "200" ]; then
+            echo "url_status_ok=true" >> $GITHUB_OUTPUT
+            echo "URL 响应正常，状态码为 200"
+          else
+            echo "url_status_ok=false" >> $GITHUB_OUTPUT
+            echo "URL 响应异常，状态码为 $STATUS_CODE，将跳过后续步骤"
+          fi
+      
+      - name: Download
+        run: |
+          curl -L "${{ vars.SOCKS5_URL }}" -o SOCKS5.txt
+
+      - name: 提交更新的SOCKS5IP库文件
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+          # 检查文件是否有变化
+          if [ ! -f SOCKS5.txt ] || [ ! -s SOCKS5.txt ]; then
+            echo "SOCKS5.txt 文件不存在或为空，跳过提交"
+            exit 0
+          fi
+          
+          if git diff --quiet SOCKS5.txt 2>/dev/null; then
+            echo "SOCKS5.txt 文件没有变化，跳过提交"
+          else
+            echo "检测到 SOCKS5.txt 文件有变化，开始提交"
+            git add SOCKS5.txt
+            git commit -m "更新SOCKS5IP库文件 $(date '+%Y-%m-%d %H:%M:%S')"
+            git push
+            echo "提交完成"
+          fi
