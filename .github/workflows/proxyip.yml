@@ -61,6 +61,7 @@ jobs:
             echo "proxyip.txt 文件没有变化，跳过提交"
           else
             echo "检测到 proxyip.txt 文件有变化，开始提交"
+            git pull
             git add proxyip.txt
             git commit -m "更新反代IP库文件 $(date '+%Y-%m-%d %H:%M:%S')"
             git push
@@ -119,6 +120,7 @@ jobs:
             echo "SubsCheck.txt 文件没有变化，跳过提交"
           else
             echo "检测到 SubsCheck.txt 文件有变化，开始提交"
+            git pull
             git add SubsCheck.txt
             git commit -m "更新SubsCheckIP库文件 $(date '+%Y-%m-%d %H:%M:%S')"
             git push
@@ -177,6 +179,7 @@ jobs:
             echo "CIDR.txt 文件没有变化，跳过提交"
           else
             echo "检测到 CIDR.txt 文件有变化，开始提交"
+            git pull
             git add CIDR.txt
             git commit -m "更新CFIP库文件 $(date '+%Y-%m-%d %H:%M:%S')"
             git push
@@ -235,6 +238,7 @@ jobs:
             echo "CIDR_ALL.txt 文件没有变化，跳过提交"
           else
             echo "检测到 CIDR_ALL.txt 文件有变化，开始提交"
+            git pull
             git add CIDR_ALL.txt
             git commit -m "更新CFIP库文件 $(date '+%Y-%m-%d %H:%M:%S')"
             git push
@@ -293,6 +297,7 @@ jobs:
             echo "SOCKS5.txt 文件没有变化，跳过提交"
           else
             echo "检测到 SOCKS5.txt 文件有变化，开始提交"
+            git pull
             git add SOCKS5.txt
             git commit -m "更新SOCKS5IP库文件 $(date '+%Y-%m-%d %H:%M:%S')"
             git push
