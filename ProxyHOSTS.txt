@@ -1,3 +1,4 @@
+ipv4.ips.agsh.us.kg:443#自定义优选
 cf.090227.xyz:443#CM维护优选
 www.visa.cn:443#visa中国优选
 mfa.gov.ua:443#乌克兰外交部
